@@ -74,7 +74,10 @@ h1, h2, h3 {
 # CARGA DE DATOS
 # ------------------------------------------------------------
 
-ARCHIVO = "/content/Reporte_Ejecutivo_DSS_Mantenimiento.xlsx"
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+ARCHIVO = BASE_DIR / "Reporte_Ejecutivo_DSS_Mantenimiento.xlsx"
 
 @st.cache_data
 def cargar_datos():
