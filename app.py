@@ -145,7 +145,115 @@ def cargar_datos():
     rolling
 ) = cargar_datos()
 
+# ------------------------------------------------------------
+# NORMALIZACIÓN DE COLUMNAS NUMÉRICAS
+# ------------------------------------------------------------
 
+def convertir_numerico(df, columnas):
+    for col in columnas:
+        if col in df.columns:
+            df[col] = (
+                df[col]
+                .astype(str)
+                .str.replace("S/", "", regex=False)
+                .str.replace(",", "", regex=False)
+                .str.strip()
+            )
+
+            df[col] = pd.to_numeric(
+                df[col],
+                errors="coerce"
+            ).fillna(0)
+
+    return df
+
+
+# FINANZAS
+finanzas = convertir_numerico(
+    finanzas,
+    [
+        "PRESUPUESTO_MANTENIMIENTO_S",
+        "IMPACTO_OPERATIVO_S",
+        "COSTO_ECONOMICO_TOTAL_S",
+        "HH_TOTAL",
+        "HORAS_INTERVENCION",
+        "COSTO_MANO_OBRA_S",
+        "COSTO_MATERIALES_S",
+        "COSTO_EQUIPOS_S",
+        "COSTO_SERVICIOS_TERCEROS_S"
+    ]
+)
+
+
+# PROGRAMA MILP
+programa = convertir_numerico(
+    programa,
+    [
+        "PRESUPUESTO_MTTO_S",
+        "IMPACTO_OPERATIVO_S",
+        "COSTO_ECONOMICO_TOTAL_S",
+        "HH_TOTAL",
+        "HORAS_INTERVENCION",
+        "RIESGO_DRBI"
+    ]
+)
+
+
+# RIESGO DRBI
+riesgo = convertir_numerico(
+    riesgo,
+    [
+        "E_t",
+        "PoF_prior",
+        "PoF_posterior",
+        "CoF_valor",
+        "Riesgo_DRBI"
+    ]
+)
+
+
+# PRESUPUESTO
+presupuesto = convertir_numerico(
+    presupuesto,
+    [
+        "Presupuesto_programado",
+        "Presupuesto_disponible",
+        "Saldo_presupuestal",
+        "Utilizacion_presupuesto_pct"
+    ]
+)
+
+
+# RECURSOS
+recursos = convertir_numerico(
+    recursos,
+    [
+        "SEMANA_PROGRAMADA",
+        "HH_Mecanico",
+        "HH_Soldador",
+        "HH_Inspector",
+        "HH_Corrosion",
+        "HH_Planificacion",
+        "HH_Operaciones"
+    ]
+)
+
+
+# ROLLING HORIZON
+rolling = convertir_numerico(
+    rolling,
+    [
+        "RIESGO_DRBI",
+        "RIESGO_ACTUAL",
+        "RIESGO_ANTERIOR",
+        "DELTA_RIESGO",
+        "VARIACION_RIESGO_PCT",
+        "SEMANA_PROGRAMADA",
+        "PRESUPUESTO_MTTO_S",
+        "HH_TOTAL",
+        "HORAS_INTERVENCION"
+    ]
+)
 # ------------------------------------------------------------
 # ENCABEZADO
 # ------------------------------------------------------------
